@@ -21,12 +21,7 @@
       </div>
       <div class="wrapper__list mt-10" v-else>
         <transition-group name="list">
-          <UserCard></UserCard>
-          <UserCard></UserCard>
-          <UserCard></UserCard>
-          <UserCard></UserCard>
-          <UserCard></UserCard>
-          <UserCard></UserCard>
+          <UserCard v-for="(item, index) in $store.state.loadingList" :key="index" :item="item" />
         </transition-group>
       </div>
     </div>
@@ -39,6 +34,7 @@ import Button from "@/components/Button.vue";
 import UserCard from "@/components/UserCard.vue";
 import Loader from "@/components/Loader.vue";
 import Notification from "@/components/Notification.vue";
+import { getUserInfo } from "@/services/businessList";
 
 @Component({
   components: { Notification, Loader, UserCard, Button },
@@ -46,7 +42,10 @@ import Notification from "@/components/Notification.vue";
 export default class ListItems extends Vue {
   async getData(): Promise<void> {
     const todos = await this.$store.dispatch("getListTodos");
-    console.log(todos);
+    const result = getUserInfo(todos);
+    this.$store.commit("changeListUsers", result);
+    // console.log(result);
+    // console.log(ListUser.getUserInfo(todos));
   }
   get variantBtn(): string {
     return this.$store.state.notification.show ? "danger" : "primary";

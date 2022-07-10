@@ -18,12 +18,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { Todos } from "@/services/request";
 
 @Component({
   name: "UserCard",
 })
-export default class UserCard extends Vue {}
+export default class UserCard extends Vue {
+  @Prop({ type: Todos, default: {} }) readonly item: Todos | undefined;
+}
 </script>
 
 <style lang="scss" scoped>

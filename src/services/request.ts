@@ -6,11 +6,12 @@ const axiosClient: AxiosInstance = axios.create({
 });
 
 interface Todos {
-  userId: number;
+  userId?: number;
   id: number;
-  title: string;
-  completed: boolean;
+  title?: string;
+  completed?: boolean;
 }
+export { Todos };
 
 export const getTodos = async (url: string): Promise<Array<Todos> | string | undefined> => {
   try {
