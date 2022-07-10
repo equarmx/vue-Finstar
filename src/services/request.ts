@@ -12,11 +12,9 @@ interface Todos {
   completed: boolean;
 }
 
-export const getTodos = async (): Promise<Array<Todos> | string | undefined> => {
-  store.commit("changeLoadingList", true);
+export const getTodos = async (url: string): Promise<Array<Todos> | string | undefined> => {
   try {
-    const { data } = await axiosClient.get(`todos`);
-    store.commit("changeLoadingList", false);
+    const { data } = await axiosClient.get(url);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -24,7 +22,6 @@ export const getTodos = async (): Promise<Array<Todos> | string | undefined> => 
     } else {
       handleUnexpectedError(error.message);
     }
-    store.commit("changeLoadingList", false);
   }
 };
 

@@ -1,0 +1,30 @@
+@media only screen and (max-width: 880px) {
+  .wrapper__list {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media only screen and (max-width: 710px) {
+  .wrapper {
+    margin-top: 20px !important;
+    &__list {
+      display: flex !important;
+      flex-direction: column !important;
+      row-gap: 15px !important;
+      justify-items: center !important;
+      justify-content: center !important;
+    }
+  }
+}
+
+.wrapper {
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 6%;
+    row-gap: 6%;
+  }
+  &__status {
+    margin-top: 20px;
+  }
+}

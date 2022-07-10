@@ -4,4 +4,9 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+#app {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+</style>

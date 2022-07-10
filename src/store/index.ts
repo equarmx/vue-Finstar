@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
+import { getTodos } from "@/services/request";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -10,6 +12,7 @@ export default new Vuex.Store({
       show: false,
     },
     loadingList: false,
+    listUsers: [],
   },
   mutations: {
     changeNotification(state, data) {
@@ -19,7 +22,17 @@ export default new Vuex.Store({
     changeLoadingList(state, value) {
       state.loadingList = value;
     },
+    changeListUsers(state, array) {
+      state.listUsers = array;
+    },
   },
-  actions: {},
+  actions: {
+    async getListTodos({ commit }) {
+      commit("changeLoadingList", true);
+      const result = await getTodos("todos");
+      commit("changeLoadingList", false);
+      return result;
+    },
+  },
   modules: {},
 });
