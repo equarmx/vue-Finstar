@@ -28,19 +28,11 @@ interface Classes {
   name: "Button",
 })
 export default class Button extends Vue {
-  @Prop({ type: Boolean, default: false }) readonly disabled:
-    | boolean
-    | undefined;
-  @Prop({ type: String, default: "primary" }) readonly variant:
-    | string
-    | undefined;
-  @Prop({ type: String, default: "normal" }) readonly variantType:
-    | string
-    | undefined;
+  @Prop({ type: Boolean, default: false }) readonly disabled: boolean | undefined;
+  @Prop({ type: String, default: "primary" }) readonly variant: string | undefined;
+  @Prop({ type: String, default: "normal" }) readonly variantType: string | undefined;
   @Prop({ type: String, default: "normal" }) readonly size: string | undefined;
-  @Prop({ type: String, default: "medium" }) readonly rounded:
-    | string
-    | undefined;
+  @Prop({ type: String, default: "medium" }) readonly rounded: string | undefined;
 
   loading = false;
   disableButton = false;
