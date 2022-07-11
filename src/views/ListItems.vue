@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper mt-20 mx-15">
-    <div class="flex flex-col justify-start items-center h-screen">
+    <div class="flex flex-col justify-start items-center">
       <Button
         class="text-white bg-black hover:bg-black/80"
         @getData="getData"

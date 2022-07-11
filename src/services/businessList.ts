@@ -1,10 +1,10 @@
 import { Todos } from "@/services/request";
 
 class User {
-  id?: number;
-  countCompleted?: number;
-  countTrue?: number;
-  countFalse?: number;
+  id: number;
+  countCompleted: number;
+  countTrue: number;
+  countFalse: number;
   titles?: Array<Todos>;
 
   constructor(
@@ -23,7 +23,7 @@ class User {
 }
 
 export const getUserInfo = (arr: Array<Todos>): Array<User> => {
-  const result: User[] = [];
+  const result: Array<User> | User[] = [];
   let id = 1;
   let countCompleted = 1;
   let countTrue = 1;
@@ -46,5 +46,13 @@ export const getUserInfo = (arr: Array<Todos>): Array<User> => {
         titles = [];
       }
     });
-  return result;
+  return result.sort((a, b) => {
+    if (a.countTrue > b.countTrue) return -1;
+    else if (a.countTrue < b.countTrue) return 1;
+    else {
+      if (a.id > b.id) return 1;
+      else if (a.id < b.id) return -1;
+      else return 0;
+    }
+  });
 };
