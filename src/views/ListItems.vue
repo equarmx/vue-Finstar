@@ -10,7 +10,7 @@
       </Button>
       <div
         class="wrapper__status"
-        v-if="$store.state.loadingList || !$store.state.loadingList.length"
+        v-if="$store.state.loadingList || !$store.state.listUsers.length"
       >
         <template v-if="$store.state.loadingList">
           <Loader />
@@ -19,11 +19,11 @@
           <Notification />
         </template>
       </div>
-      <div class="wrapper__list mt-10" v-else>
-        <transition-group name="list">
-          <UserCard v-for="(item, index) in $store.state.loadingList" :key="index" :item="item" />
+      <template v-else>
+        <transition-group name="list" class="wrapper__list mt-10">
+          <UserCard v-for="(item, index) in $store.state.listUsers" :key="index" :item="item" />
         </transition-group>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -44,8 +44,7 @@ export default class ListItems extends Vue {
     const todos = await this.$store.dispatch("getListTodos");
     const result = getUserInfo(todos);
     this.$store.commit("changeListUsers", result);
-    // console.log(result);
-    // console.log(ListUser.getUserInfo(todos));
+    console.log(this.$store.state.listUsers);
   }
   get variantBtn(): string {
     return this.$store.state.notification.show ? "danger" : "primary";
@@ -62,7 +61,7 @@ export default class ListItems extends Vue {
 }
 .list-enter-active,
 .list-leave-active {
-  transition: all 1s;
+  transition: all 2s;
 }
 .list-enter,
 .list-leave-to {
