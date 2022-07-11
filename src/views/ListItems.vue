@@ -1,29 +1,31 @@
 <template>
-  <div class="wrapper mt-20 mx-15">
-    <div class="flex flex-col justify-start items-center">
-      <Button
-        class="text-white bg-black hover:bg-black/80"
-        @getData="getData"
-        :variant="variantBtn"
-      >
-        Получить данные
-      </Button>
-      <div
-        class="wrapper__status"
-        v-if="$store.state.loadingList || !$store.state.listUsers.length"
-      >
-        <template v-if="$store.state.loadingList">
-          <Loader />
-        </template>
+  <div class="wrapper mx-15">
+    <div class="wrapper__container">
+      <div class="flex flex-col justify-start items-center" style="height: 100%">
+        <Button
+          class="text-white bg-black hover:bg-black/80"
+          @clickEvent="getData"
+          :variant="variantBtn"
+        >
+          Получить данные
+        </Button>
+        <div
+          class="wrapper__container__status"
+          v-if="$store.state.loadingList || !$store.state.listUsers.length"
+        >
+          <template v-if="$store.state.loadingList">
+            <Loader />
+          </template>
+          <template v-else>
+            <Notification />
+          </template>
+        </div>
         <template v-else>
-          <Notification />
+          <transition-group name="list" class="wrapper__container__list mt-10">
+            <UserCard v-for="(item, index) in $store.state.listUsers" :key="index" :item="item" />
+          </transition-group>
         </template>
       </div>
-      <template v-else>
-        <transition-group name="list" class="wrapper__list mt-10">
-          <UserCard v-for="(item, index) in $store.state.listUsers" :key="index" :item="item" />
-        </transition-group>
-      </template>
     </div>
   </div>
 </template>

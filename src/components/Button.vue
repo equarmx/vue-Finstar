@@ -95,7 +95,7 @@ export default class Button extends Vue {
     this.disableButton = false;
   }
   onClick(): void {
-    this.$emit("getData");
+    this.$emit("clickEvent");
     this.startLoading();
   }
 }
@@ -104,6 +104,9 @@ export default class Button extends Vue {
 <style lang="scss" scoped>
 .base-button + .base-button {
   margin-left: 1em;
+}
+.base-button {
+  min-width: 160px !important;
 }
 
 @keyframes spinner {
