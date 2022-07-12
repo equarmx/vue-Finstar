@@ -83,7 +83,7 @@ export default class Login extends Vue {
     this.$store.commit("changeLoadingList", true);
     if (this.validated) {
       const token = Logging.generateToken();
-      Vue.$cookies.set("accessToken", token, 60 * 60 * 12);
+      Logging.setToken(token);
       this.$router.push({ path: "/" });
       this.$store.commit("changeNotification", {
         value: false,

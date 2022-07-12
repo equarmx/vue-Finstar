@@ -1,4 +1,5 @@
 import Vue from "vue";
+import axios from "axios";
 
 export default class Logging {
   static checkCookie(): boolean {
@@ -11,5 +12,11 @@ export default class Logging {
       a += ((Math.random() * b) | 0).toString(b);
     }
     return a;
+  }
+  static setToken(token: string): void {
+    Vue.$cookies.set("accessToken", token, 60 * 60 * 12);
+    if (Vue.$cookies.get("accessToken") !== null) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${Vue.$cookies.get("accessToken")}`;
+    }
   }
 }
