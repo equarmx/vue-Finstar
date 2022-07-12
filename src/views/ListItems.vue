@@ -32,10 +32,10 @@
             Гистограмма с помощью canvas
           </h3>
           <BarChart :items="$store.state.listUsers" />
-          <h3 class="text-3xl font-normal leading-normal mt-0 mb-2 text-black-600">
-            Гистограмма с помощью библиотеки Chart.js
-          </h3>
-          <BarChartLib :items="$store.state.listUsers" />
+          <!-- <h3 class="text-3xl font-normal leading-normal mt-0 mb-2 text-black-600">-->
+          <!-- Гистограмма с помощью библиотеки Chart.js-->
+          <!-- </h3>-->
+          <!-- <BarChartLib :items="$store.state.listUsers" />-->
         </template>
       </div>
     </div>
