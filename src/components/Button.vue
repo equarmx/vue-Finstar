@@ -40,7 +40,7 @@ export default class Button extends Vue {
   get btnClass(): Classes {
     return {
       "base-spinner": this.loading,
-      "cursor-not-allowed": this.disableButton,
+      "cursor-not-allowed": this.getDisabled,
       "base-button inline-flex align-middle align-items-center justify-center font-medium focus:outline-none border-2":
         true,
 
@@ -56,13 +56,13 @@ export default class Button extends Vue {
     if (!this.variant) return "";
     if (this.variant === "primary") {
       if (this.variantType === "normal") {
-        return this.disableButton
+        return this.getDisabled
           ? "border-blue-300 bg-blue-300 text-white"
           : "border-blue-600 bg-blue-600 hover:bg-blue-700 hover:border-blue-700 text-white";
       } else return "";
     } else if (this.variant === "danger") {
       if (this.variantType === "normal") {
-        return this.disableButton
+        return this.getDisabled
           ? "border-red-300 bg-red-300 text-white"
           : "border-red-600 bg-red-600 hover:bg-red-700 hover:border-red-700 text-white";
       } else return "";
@@ -70,11 +70,15 @@ export default class Button extends Vue {
       return "border-orange-600 bg-orange-600 hover:bg-orange-700 hover:border-orange-700 text-white";
     } else if (this.variant === "success") {
       if (this.variantType === "normal") {
-        return this.disableButton
+        return this.getDisabled
           ? "border-green-300 bg-green-300 text-white"
           : "border-green-600 bg-green-600 hover:bg-green-700 hover:border-green-700 text-white";
       } else return "";
     } else return "";
+  }
+
+  get getDisabled(): boolean {
+    return this.disableButton || this.disabled;
   }
 
   @Watch("disabled")

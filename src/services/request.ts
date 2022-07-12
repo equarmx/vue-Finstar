@@ -5,13 +5,12 @@ const axiosClient: AxiosInstance = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com/",
 });
 
-interface Todos {
+export interface Todos {
   userId?: number;
   id: number;
   title?: string;
   completed?: boolean;
 }
-export { Todos };
 
 export const getTodos = async (url: string): Promise<Array<Todos> | string | undefined> => {
   try {

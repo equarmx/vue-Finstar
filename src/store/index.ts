@@ -16,8 +16,9 @@ export default new Vuex.Store({
   },
   mutations: {
     changeNotification(state, data) {
-      state.notification.show = true;
-      state.notification.message = data;
+      const { value, message } = data;
+      state.notification.show = value;
+      state.notification.message = message;
     },
     changeLoadingList(state, value) {
       state.loadingList = value;

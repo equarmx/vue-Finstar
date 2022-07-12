@@ -3,6 +3,8 @@ import VueRouter, { RouteConfig } from "vue-router";
 import ListItems from "../views/ListItems.vue";
 import Login from "../views/Login.vue";
 
+import Logging from "@/services/logging";
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -25,7 +27,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== "Login") next({ name: "Login" });
+  if (to.name !== "Login" && !Logging.checkCookie()) next({ name: "Login" });
   else next();
 });
 

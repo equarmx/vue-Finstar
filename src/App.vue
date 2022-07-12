@@ -7,13 +7,10 @@
 <style lang="scss">
 html {
   background: #eef2f5;
-  //height: 100vh;
 }
 
 body {
   min-height: 100vh;
-  //height: 100%;
-  //width: 100%;
 }
 
 #app {

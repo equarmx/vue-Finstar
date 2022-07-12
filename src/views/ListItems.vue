@@ -22,7 +22,11 @@
         </div>
         <template v-else>
           <transition-group name="list" class="wrapper__container__list mt-10">
-            <UserCard v-for="(item, index) in $store.state.listUsers" :key="index" :item="item" />
+            <UserCard
+              v-for="(item, index) in $store.state.listUsers"
+              :key="index + 1"
+              :item="item"
+            />
           </transition-group>
         </template>
       </div>
