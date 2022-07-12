@@ -9,14 +9,9 @@
       </div>
     </div>
     <ul class="card_wrapper__content">
-      <li
-        class="card_wrapper__content__todo"
-        v-for="(title, index) in item.titles.slice(0, 2)"
-        :key="index"
-      >
+      <li class="card_wrapper__content__todo" v-for="(title, index) in item.titles" :key="index">
         {{ title.title }}
       </li>
-      <li class="card_wrapper__content__todo">...</li>
     </ul>
   </div>
 </template>
