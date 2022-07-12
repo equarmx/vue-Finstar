@@ -52,7 +52,8 @@ export default class BarChartLib extends Vue {
     maintainAspectRatio: true,
   };
 
-  get sortedItems(): Array<User> {
+  get sortedItems(): Array<User> | Array<[]> {
+    if (!this.items) return [];
     return this.items?.sort((a, b) => {
       if (a.id > b.id) return 1;
       else if (a.id < b.id) return -1;
@@ -61,25 +62,25 @@ export default class BarChartLib extends Vue {
   }
 
   get getLabels(): Array<string> {
-    return this.sortedItems?.map((elem) => {
+    return (this.sortedItems as Array<User>).map((elem: User) => {
       return `User ${elem.id}`;
     });
   }
 
   get getTrue(): Array<number> {
-    return this.sortedItems?.map((elem) => {
+    return (this.sortedItems as Array<User>).map((elem: User) => {
       return elem.countTrue;
     });
   }
 
   get getFalse(): Array<number> {
-    return this.sortedItems?.map((elem) => {
+    return (this.sortedItems as Array<User>).map((elem: User) => {
       return elem.countFalse;
     });
   }
 
   get getTotal(): Array<number> {
-    return this.sortedItems?.map((elem) => {
+    return (this.sortedItems as Array<User>).map((elem: User) => {
       return elem.countCompleted;
     });
   }

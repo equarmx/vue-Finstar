@@ -5,8 +5,9 @@ export default class BarChartService {
     numGridLines: number,
     maxValue: number,
     gridLineIncrement: number,
-    context: CanvasRenderingContext2D
+    context: CanvasRenderingContext2D | null
   ): number {
+    if (!context) return 1;
     let longestValueWidth = 0;
     for (let n = 0; n <= numGridLines; n++) {
       const value = "" + (maxValue - n * gridLineIncrement);
@@ -14,7 +15,8 @@ export default class BarChartService {
     }
     return longestValueWidth;
   }
-  static getLabelAreaHeight(data: Array<User>, context: CanvasRenderingContext2D): number {
+  static getLabelAreaHeight(data: Array<User>, context: CanvasRenderingContext2D | null): number {
+    if (!context) return 1;
     let maxLabelWidth = 0;
     for (let n = 0; n < data.length; n++) {
       const label = `Пользователь ${data[n].id}`;

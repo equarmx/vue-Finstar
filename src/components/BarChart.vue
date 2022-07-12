@@ -9,6 +9,18 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { User } from "@/services/businessList";
 import BarChartService from "@/services/barChart";
 
+interface Config {
+  canvas: HTMLCanvasElement;
+  data: Array<User>;
+  colorTop: string;
+  colorBot: string;
+  barWidth: number;
+  gridLineIncrement: number;
+  maxValue: number;
+  minValue: number;
+  context: CanvasRenderingContext2D | null;
+}
+
 class Data {
   canvas: HTMLCanvasElement;
   data: Array<User>;
@@ -31,7 +43,7 @@ class Data {
   width: number;
   height: number;
 
-  constructor(config) {
+  constructor(config: Config) {
     const {
       canvas,
       data,
@@ -62,7 +74,7 @@ class Data {
     // relationships
     this.context = context;
     this.range = this.maxValue - this.minValue;
-    this.numGridLines = parseInt(Math.round(this.range / this.gridLineIncrement));
+    this.numGridLines = Math.round(this.range / this.gridLineIncrement);
     this.longestValueWidth = BarChartService.getLongestValueWidth(
       this.numGridLines,
       this.maxValue,
@@ -105,6 +117,7 @@ export default class BarChart extends Vue {
   gridLineIncrement = 1;
 
   get sortedItems(): Array<User> {
+    if (!this.items) return [];
     return this.items?.sort((a, b) => {
       if (a.id > b.id) return 1;
       else if (a.id < b.id) return -1;
@@ -129,7 +142,17 @@ export default class BarChart extends Vue {
     return this.colors[Math.floor(Math.random() * this.colors.length)];
   }
 
+  get getContext(): CanvasRenderingContext2D | null {
+    return this.getCanvas.getContext("2d");
+  }
+
   createBarChart(): void {
+    const res = this.getCanvas.getContext("2d");
+    if (!res || !(res instanceof CanvasRenderingContext2D)) {
+      throw new Error("Failed to get 2D context");
+    }
+    const context: CanvasRenderingContext2D = res;
+
     const data = new Data({
       canvas: this.getCanvas,
       data: this.sortedItems,
@@ -139,7 +162,7 @@ export default class BarChart extends Vue {
       gridLineIncrement: this.gridLineIncrement,
       minValue: 0,
       maxValue: this.maxValue,
-      context: this.getCanvas.getContext("2d"),
+      context: context,
     });
 
     // draw bar chart
@@ -151,7 +174,8 @@ export default class BarChart extends Vue {
     this.drawXLabels(data);
   }
 
-  drawXLabels(data: Data): void {
+  drawXLabels(data: Data): void | undefined {
+    if (!data.context) return;
     let context = data.context;
     context.save();
     let arrayItems = data.data;
@@ -172,7 +196,8 @@ export default class BarChart extends Vue {
     context.restore();
   }
 
-  drawYValues(data: Data): void {
+  drawYValues(data: Data): void | undefined {
+    if (!data.context) return;
     let context = data.context;
     context.save();
     context.font = data.font;
@@ -181,9 +206,9 @@ export default class BarChart extends Vue {
     context.textBaseline = "middle";
 
     for (let n = 0; n <= data.numGridLines; n++) {
-      let value = "" + data.maxValue - n * data.gridLineIncrement;
+      let value = data.maxValue - n * data.gridLineIncrement;
       let thisY = (n * data.height) / data.numGridLines + data.y;
-      context.fillText(value, data.x - 5, thisY);
+      context.fillText(`${value}`, data.x - 5, thisY);
     }
 
     let posY = ((data.numGridLines / 2) * data.height) / data.numGridLines + data.y - 20;
@@ -209,7 +234,8 @@ export default class BarChart extends Vue {
     context.restore();
   }
 
-  drawBars(data: Data): void {
+  drawBars(data: Data): void | undefined {
+    if (!data.context) return;
     let context = data.context;
     context.save();
     let arrayItems = data.data;
@@ -244,7 +270,8 @@ export default class BarChart extends Vue {
     context.restore();
   }
 
-  drawGridlines(data: Data): void {
+  drawGridlines(data: Data): void | undefined {
+    if (!data.context) return;
     let context = data.context;
     context.save();
     context.strokeStyle = data.gridColor;
@@ -261,7 +288,8 @@ export default class BarChart extends Vue {
     context.restore();
   }
 
-  drawXAxis(data: Data): void {
+  drawXAxis(data: Data): void | undefined {
+    if (!data.context) return;
     let context = data.context;
     context.save();
     context.beginPath();
@@ -273,7 +301,8 @@ export default class BarChart extends Vue {
     context.restore();
   }
 
-  drawYAxis(data: Data): void {
+  drawYAxis(data: Data): void | undefined {
+    if (!data.context) return;
     let context = data.context;
     context.save();
     context.beginPath();

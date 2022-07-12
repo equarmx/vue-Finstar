@@ -24,7 +24,7 @@ import { Todos } from "@/services/request";
   name: "UserCard",
 })
 export default class UserCard extends Vue {
-  @Prop({ type: Todos, default: {} }) readonly item: Todos | undefined;
+  @Prop({ type: Object, default: {} }) readonly item: Todos | undefined;
 }
 </script>
 
