@@ -41,10 +41,10 @@ export default class BarChartLib extends Vue {
   @Prop({ type: Number, default: 400 }) readonly width: number | undefined;
   @Prop({ type: Number, default: 400 }) readonly height: number | undefined;
   @Prop({ type: String, default: "" }) readonly cssClasses: string | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  @Prop({ type: Object, default: () => {} }) readonly styles: Record<string, unknown> | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  @Prop({ type: Object, default: () => {} }) readonly plugins: Record<string, unknown> | undefined;
+  @Prop({ type: Object, default: () => ({}) }) readonly styles: Record<string, unknown> | undefined;
+  @Prop({ type: Object, default: () => ({}) }) readonly plugins:
+    | Record<string, unknown>
+    | undefined;
   @Prop({ type: Array, default: [] }) readonly items: Array<User> | undefined;
 
   chartOptions = {
