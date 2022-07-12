@@ -69,7 +69,7 @@ export default class ListItems extends Vue {
 }
 .list-enter-active,
 .list-leave-active {
-  transition: all 2s;
+  transition: all 1s ease-in-out;
 }
 .list-enter,
 .list-leave-to {

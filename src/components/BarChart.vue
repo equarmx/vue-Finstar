@@ -1,5 +1,10 @@
 <template>
-  <canvas id="myCanvas" ref="myCanvas" style="width: 70%"></canvas>
+  <canvas
+    id="myCanvas"
+    ref="myCanvas"
+    style="transform: scale(2)"
+    class="mt-20 mx-10 mb-10"
+  ></canvas>
 </template>
 
 <script lang="ts">
@@ -10,7 +15,8 @@ import BarChartService from "@/services/barChart";
 class Data {
   canvas: HTMLCanvasElement;
   data: Array<User>;
-  color: string;
+  colorTop: string;
+  colorBot: string;
   barWidth: number;
   gridLineIncrement: number;
   maxValue: number;
@@ -29,11 +35,21 @@ class Data {
   height: number;
 
   constructor(config) {
-    const { canvas, data, color, barWidth, gridLineIncrement, maxValue, minValue, context } =
-      config;
+    const {
+      canvas,
+      data,
+      colorTop,
+      colorBot,
+      barWidth,
+      gridLineIncrement,
+      maxValue,
+      minValue,
+      context,
+    } = config;
     this.canvas = canvas;
     this.data = data;
-    this.color = color;
+    this.colorTop = colorTop;
+    this.colorBot = colorBot;
     this.barWidth = barWidth;
     this.gridLineIncrement = gridLineIncrement;
 
@@ -43,7 +59,7 @@ class Data {
     // constants
     this.font = "12pt";
     this.axisColor = "#555";
-    this.gridColor = "black";
+    this.gridColor = "darkgrey";
     this.padding = 10;
 
     // relationships
@@ -58,7 +74,7 @@ class Data {
     );
     this.x = this.padding + this.longestValueWidth;
     this.y = this.padding * 2;
-    this.width = this.canvas.width - (this.longestValueWidth + this.padding * 2);
+    this.width = this.canvas.width - (this.longestValueWidth + this.padding * 8);
     this.height =
       this.canvas.height -
       (BarChartService.getLabelAreaHeight(this.data, this.context) + this.padding * 4);
@@ -72,7 +88,6 @@ export default class BarChart extends Vue {
   @Prop({ type: Array, default: [] }) readonly items: Array<User> | undefined;
 
   mounted(): void {
-    // this.draw();
     this.createBarChart();
   }
 
@@ -90,6 +105,8 @@ export default class BarChart extends Vue {
     "#56D953",
   ];
 
+  gridLineIncrement = 4;
+
   get sortedItems(): Array<User> {
     return this.items?.sort((a, b) => {
       if (a.id > b.id) return 1;
@@ -103,9 +120,11 @@ export default class BarChart extends Vue {
   }
 
   get maxValue(): number {
-    return Math.max.apply(
-      null,
-      this.sortedItems.map((elem) => elem.countCompleted)
+    return (
+      Math.max.apply(
+        null,
+        this.sortedItems.map((elem) => elem.countCompleted)
+      ) + this.gridLineIncrement
     );
   }
 
@@ -114,18 +133,18 @@ export default class BarChart extends Vue {
   }
 
   createBarChart(): void {
-    console.log(this.getRandomColor());
     const data = new Data({
       canvas: this.getCanvas,
       data: this.sortedItems,
-      color: this.getRandomColor(),
+      colorBot: this.getRandomColor(),
+      colorTop: this.getRandomColor(),
       barWidth: 10,
-      gridLineIncrement: 5,
+      gridLineIncrement: this.gridLineIncrement,
       minValue: 0,
       maxValue: this.maxValue,
       context: this.getCanvas.getContext("2d"),
     });
-    console.log(data);
+
     // draw bar chart
     this.drawGridlines(data);
     this.drawYAxis(data);
@@ -140,13 +159,13 @@ export default class BarChart extends Vue {
     context.save();
     let arrayItems = data.data;
     let barSpacing = data.width / arrayItems.length;
+    context.font = data.font;
 
     for (let n = 0; n < arrayItems.length; n++) {
-      let label = `Пользователь ${arrayItems[n].id}`;
+      let label = `User ${arrayItems[n].id}`;
       context.save();
       context.translate(data.x + (n + 1 / 2) * barSpacing, data.y + data.height + 10);
       context.rotate((-1 * Math.PI) / 4); // rotate 45 degrees
-      context.font = data.font;
       context.fillStyle = "black";
       context.textAlign = "right";
       context.textBaseline = "middle";
@@ -170,6 +189,26 @@ export default class BarChart extends Vue {
       context.fillText(value, data.x - 5, thisY);
     }
 
+    let posY = ((data.numGridLines / 2) * data.height) / data.numGridLines + data.y - 20;
+    let posX = data.x + data.width + 5;
+    context.beginPath();
+    context.rect(posX, posY, data.barWidth + 10, 10);
+    context.fillStyle = data.colorTop;
+    context.fill();
+    context.beginPath();
+    context.font = "bold 8px Solid";
+    context.fillStyle = "black";
+    context.fillText("Всего", posX + data.barWidth + 35, posY + 5);
+
+    context.beginPath();
+    context.rect(posX, posY + 25, data.barWidth + 10, 10);
+    context.fillStyle = data.colorBot;
+    context.fill();
+    context.beginPath();
+    context.font = "bold 8px Solid";
+    context.fillStyle = "black";
+    context.fillText("True", posX + data.barWidth + 32, posY + 25 + 5);
+
     context.restore();
   }
 
@@ -182,9 +221,11 @@ export default class BarChart extends Vue {
 
     for (let n = 0; n < arrayItems.length; n++) {
       // let bar = arrayItems[n];
-      let barHeight = (arrayItems[n].countTrue - data.minValue) * unitHeight;
+      let barBotHeight = (arrayItems[n].countTrue - data.minValue) * unitHeight;
+      let barTopHeight =
+        (arrayItems[n].countCompleted - arrayItems[n].countTrue - data.minValue) * unitHeight;
 
-      if (barHeight > 0) {
+      if (barBotHeight > 0) {
         context.save();
         context.translate(
           Math.round(data.x + (n + 1 / 2) * barSpacing),
@@ -194,12 +235,12 @@ export default class BarChart extends Vue {
         context.scale(1, -1);
 
         context.beginPath();
-        context.rect(-data.barWidth / 2, 0, data.barWidth, barHeight);
-        context.fillStyle = this.getRandomColor();
+        context.rect(-data.barWidth / 2, 0, data.barWidth, barBotHeight);
+        context.fillStyle = data.colorBot;
         context.fill();
         context.beginPath();
-        context.rect(-data.barWidth / 2, barHeight, data.barWidth, barHeight);
-        context.fillStyle = this.getRandomColor();
+        context.rect(-data.barWidth / 2, barBotHeight, data.barWidth, barTopHeight);
+        context.fillStyle = data.colorTop;
         context.fill();
         context.restore();
       }
@@ -211,7 +252,7 @@ export default class BarChart extends Vue {
     let context = data.context;
     context.save();
     context.strokeStyle = data.gridColor;
-    context.lineWidth = 2;
+    context.lineWidth = 1;
 
     // draw y axis grid lines
     for (let n = 0; n < data.numGridLines; n++) {
@@ -246,42 +287,6 @@ export default class BarChart extends Vue {
     context.lineWidth = 2;
     context.stroke();
     context.restore();
-  }
-
-  reset(): void {
-    // Clearing the Canvas
-    let canvas = this.$refs.myCanvas as HTMLCanvasElement;
-    let ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-    ctx?.clearRect(0, 0, canvas.width, canvas.height);
-    window.location.reload();
-  }
-  draw(): void {
-    const canvas = this.$refs.myCanvas as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d");
-    let width = 25; // bar width
-    let X = 10; // first bar position
-
-    if (!ctx) return;
-
-    const arr = this.items?.sort((a, b) => {
-      if (a.id > b.id) return 1;
-      else if (a.id < b.id) return -1;
-      else return 0;
-    });
-    // Filling the Rectangle based on the input values
-    arr?.forEach((elem) => {
-      ctx.fillStyle = this.getRandomColor();
-      let h = elem.countCompleted;
-      ctx.fillRect(X, canvas.height - h, width, h);
-      X += width + 45;
-      // Text to display Bar number
-      ctx.fillStyle = "#4da6ff";
-      ctx.fillText("" + elem.id, X - 50, canvas.height - h - 10);
-    });
-    // Text to display scale
-
-    ctx.fillStyle = "#000000";
-    ctx.fillText("Scale X : " + canvas.width + " Y : " + canvas.height, 800, 10);
   }
 }
 </script>
