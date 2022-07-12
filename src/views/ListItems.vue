@@ -28,7 +28,14 @@
               :item="item"
             />
           </transition-group>
+          <h3 class="text-3xl font-normal leading-normal mt-0 mb-2 text-black-600">
+            Гистограмма с помощью canvas
+          </h3>
           <BarChart :items="$store.state.listUsers" />
+          <h3 class="text-3xl font-normal leading-normal mt-0 mb-2 text-black-600">
+            Гистограмма с помощью библиотеки Chart.js
+          </h3>
+          <BarChartLib :items="$store.state.listUsers" />
         </template>
       </div>
     </div>
@@ -43,9 +50,10 @@ import Loader from "@/components/Loader.vue";
 import Notification from "@/components/Notification.vue";
 import { getUserInfo } from "@/services/businessList";
 import BarChart from "@/components/BarChart.vue";
+import BarChartLib from "@/components/BarChartLib.vue";
 
 @Component({
-  components: { BarChart, Notification, Loader, UserCard, Button },
+  components: { BarChartLib, BarChart, Notification, Loader, UserCard, Button },
 })
 export default class ListItems extends Vue {
   async getData(): Promise<void> {
@@ -56,6 +64,11 @@ export default class ListItems extends Vue {
   }
   get variantBtn(): string {
     return this.$store.state.notification.show ? "danger" : "primary";
+  }
+  get isMobile(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
   }
 }
 </script>

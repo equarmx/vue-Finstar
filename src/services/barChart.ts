@@ -16,7 +16,6 @@ export default class BarChartService {
   }
   static getLabelAreaHeight(data: Array<User>, context: CanvasRenderingContext2D): number {
     let maxLabelWidth = 0;
-    console.log(data);
     for (let n = 0; n < data.length; n++) {
       const label = `Пользователь ${data[n].id}`;
       maxLabelWidth = Math.max(maxLabelWidth, context.measureText(label).width);
