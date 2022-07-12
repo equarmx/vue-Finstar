@@ -223,7 +223,6 @@ export default class BarChart extends Vue {
     let unitHeight = data.height / data.range;
 
     for (let n = 0; n < arrayItems.length; n++) {
-      // let bar = arrayItems[n];
       let barBotHeight = (arrayItems[n].countTrue - data.minValue) * unitHeight;
       let barTopHeight =
         (arrayItems[n].countCompleted - arrayItems[n].countTrue - data.minValue) * unitHeight;
