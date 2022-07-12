@@ -1,6 +1,6 @@
 import { Todos } from "@/services/request";
 
-class User {
+export class User {
   id: number;
   countCompleted: number;
   countTrue: number;

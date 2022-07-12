@@ -28,6 +28,7 @@
               :item="item"
             />
           </transition-group>
+          <BarChart :items="$store.state.listUsers" />
         </template>
       </div>
     </div>
@@ -41,9 +42,10 @@ import UserCard from "@/components/UserCard.vue";
 import Loader from "@/components/Loader.vue";
 import Notification from "@/components/Notification.vue";
 import { getUserInfo } from "@/services/businessList";
+import BarChart from "@/components/BarChart.vue";
 
 @Component({
-  components: { Notification, Loader, UserCard, Button },
+  components: { BarChart, Notification, Loader, UserCard, Button },
 })
 export default class ListItems extends Vue {
   async getData(): Promise<void> {

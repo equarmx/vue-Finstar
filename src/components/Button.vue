@@ -78,7 +78,7 @@ export default class Button extends Vue {
   }
 
   get getDisabled(): boolean {
-    return this.disableButton || this.disabled;
+    return this.disableButton || !!this.disabled;
   }
 
   @Watch("disabled")
