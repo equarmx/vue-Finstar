@@ -136,8 +136,6 @@ export default class BarChart extends Vue {
   }
 
   createBarChart(): void {
-    // this.getCanvas.height = this.getCanvas.width * 1.5;
-
     const data = new Data({
       canvas: this.getCanvas,
       data: this.sortedItems,
