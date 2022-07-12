@@ -1,12 +1,6 @@
 <template>
-  <div class="chart-container" style="position: relative; width: 70%">
-    <canvas
-      id="myCanvas"
-      ref="myCanvas"
-      style="transform: scale(1); display: block"
-      width="1000"
-      height="1000"
-    ></canvas>
+  <div class="chart-container">
+    <canvas id="myCanvas" ref="myCanvas" width="1000" height="1000"></canvas>
   </div>
 </template>
 
@@ -296,5 +290,11 @@ export default class BarChart extends Vue {
 <style lang="scss" scoped>
 #myCanvas {
   width: 100%;
+  transform: scale(1);
+  display: block;
+}
+.chart-container {
+  position: relative;
+  width: 70%;
 }
 </style>
