@@ -1,6 +1,6 @@
 # finstart
 
-Project have auth module with simple validation whick check required property. After auth set Cookie by `Vue-cookies`.
+Project have auth module with simple validation which check required property. After auth set Cookie by `Vue-cookies`.
 
 ## Project setup
 ```
