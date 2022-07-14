@@ -1,4 +1,4 @@
-# finstart
+# Finstar Financial Group
 
 Project have auth module with simple validation which check required property. After auth set Cookie by `Vue-cookies`.
 
